@@ -4,20 +4,23 @@ let PAGESmenuShapeBG = $(".menu_shape-bg.pages");
 let PAGESmenuLink = $(".menu_link.pages");
 let PAGEScurrentLink = $(".menu_link.pages.w--current");
 let PAGESmenuWidth = $(".menu.pages").outerWidth();
+let PAGESmenuOffset = $(".menu.pages").offset().left;
 
 // On Click
 PAGESmenuLink.on("click", function(e) {
     e.preventDefault();
     let clickedIndex = $(this).index();
     let currentIndex = PAGEScurrentLink.index();
+    let lastIndex = PAGESmenuLink.length - 1;
+    let firstIndex = 0;
 
     // menuShape move
     barba.go($(this).attr("href"), "opacity-transition");
 
     // menuShapeBG Stretch
-    if (clickedIndex > currentIndex) {
+    if (clickedIndex > currentIndex && clickedIndex !== lastIndex) {
         PAGESmenuShape.css("justify-content", "flex-end");
-    } else if (clickedIndex < currentIndex) {
+    } else if (clickedIndex < currentIndex && currentIndex !== lastIndex && clickedIndex !== firstIndex) {
         PAGESmenuShape.css("justify-content", "flex-start");
     }
 
@@ -25,7 +28,7 @@ PAGESmenuLink.on("click", function(e) {
         PAGESmenuShapeBG.css("transition", `width ${duration / 2}ms`);
         PAGESmenuShapeBG.css("width", "140%");
         setTimeout(() => {
-            PAGESmenuShapeBG.css("width", PAGESmenuWidth);
+            PAGESmenuShapeBG.css("width", "100%");
         }, duration / 2);
     }
 
@@ -38,7 +41,6 @@ PAGESmenuLink.on("click", function(e) {
 function moveShape(PAGEStarget) {
     let PAGESlinkWidth = PAGEStarget.innerWidth();
     let PAGESlinkOffset = PAGEStarget.offset().left;
-    let PAGESmenuOffset = $(".menu.pages").offset().left;
     let PAGESleftPosition = PAGESlinkOffset - PAGESmenuOffset;
     PAGESmenuShape.css("transition", `all ${duration + 200}ms`);
     PAGESmenuShape.css("width", PAGESlinkWidth);
@@ -52,5 +54,6 @@ PAGESmenuShape.css("opacity", "1");
 // resize
 window.addEventListener("resize", function() {
     PAGESmenuWidth = $(".menu.pages").outerWidth();
+    PAGESmenuOffset = $(".menu.pages").offset().left;
     moveShape(PAGEScurrentLink);
 });
