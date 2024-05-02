@@ -1,3 +1,4 @@
+
 let duration = 600;
 let PAGESmenuShape = $(".menu_shape.pages");
 let PAGESmenuShapeBG = $(".menu_shape-bg.pages");
@@ -9,14 +10,16 @@ PAGESmenuLink.on("click", function(e) {
     e.preventDefault();
     let clickedIndex = $(this).index();
     let currentIndex = PAGEScurrentLink.index();
+    let lastIndex = PAGESmenuLink.length - 1;
+    let firstIndex = 0;
 
     // menuShape move
     barba.go($(this).attr("href"), "opacity-transition");
 
     // menuShapeBG Stretch
-    if (clickedIndex > currentIndex) {
+    if (clickedIndex > currentIndex && clickedIndex !== lastIndex) {
         PAGESmenuShape.css("justify-content", "flex-end");
-    } else {
+    } else if (clickedIndex < currentIndex && currentIndex !== lastIndex && clickedIndex !== firstIndex) {
         PAGESmenuShape.css("justify-content", "flex-start");
     }
 
