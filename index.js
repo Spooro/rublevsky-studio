@@ -1,25 +1,23 @@
-
 let duration = 600;
 let PAGESmenuShape = $(".menu_shape.pages");
 let PAGESmenuShapeBG = $(".menu_shape-bg.pages");
 let PAGESmenuLink = $(".menu_link.pages");
 let PAGEScurrentLink = $(".menu_link.pages.w--current");
+let PAGESmenuWidth = $(".menu.pages").outerWidth();
 
 // On Click
 PAGESmenuLink.on("click", function(e) {
     e.preventDefault();
     let clickedIndex = $(this).index();
     let currentIndex = PAGEScurrentLink.index();
-    let lastIndex = PAGESmenuLink.length - 1;
-    let firstIndex = 0;
 
     // menuShape move
     barba.go($(this).attr("href"), "opacity-transition");
 
     // menuShapeBG Stretch
-    if (clickedIndex > currentIndex && clickedIndex !== lastIndex) {
+    if (clickedIndex > currentIndex) {
         PAGESmenuShape.css("justify-content", "flex-end");
-    } else if (clickedIndex < currentIndex && currentIndex !== lastIndex && clickedIndex !== firstIndex) {
+    } else if (clickedIndex < currentIndex) {
         PAGESmenuShape.css("justify-content", "flex-start");
     }
 
@@ -27,7 +25,7 @@ PAGESmenuLink.on("click", function(e) {
         PAGESmenuShapeBG.css("transition", `width ${duration / 2}ms`);
         PAGESmenuShapeBG.css("width", "140%");
         setTimeout(() => {
-            PAGESmenuShapeBG.css("width", "100%");
+            PAGESmenuShapeBG.css("width", PAGESmenuWidth);
         }, duration / 2);
     }
 
@@ -53,5 +51,6 @@ PAGESmenuShape.css("opacity", "1");
 
 // resize
 window.addEventListener("resize", function() {
+    PAGESmenuWidth = $(".menu.pages").outerWidth();
     moveShape(PAGEScurrentLink);
 });
