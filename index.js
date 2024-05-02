@@ -22,14 +22,18 @@ PAGESmenuLink.on("click", function(e) {
         PAGESmenuShape.css("justify-content", "flex-end");
     } else if (clickedIndex < currentIndex && currentIndex !== lastIndex && clickedIndex !== firstIndex) {
         PAGESmenuShape.css("justify-content", "flex-start");
+    } else {
+        PAGESmenuShape.css("justify-content", "center");
     }
 
     if (currentIndex !== clickedIndex) {
-        PAGESmenuShapeBG.css("transition", `width ${duration / 2}ms`);
-        PAGESmenuShapeBG.css("width", "140%");
-        setTimeout(() => {
-            PAGESmenuShapeBG.css("width", "100%");
-        }, duration / 2);
+        if (clickedIndex !== lastIndex && currentIndex !== firstIndex) {
+            PAGESmenuShapeBG.css("transition", `width ${duration / 2}ms`);
+            PAGESmenuShapeBG.css("width", "140%");
+            setTimeout(() => {
+                PAGESmenuShapeBG.css("width", "100%");
+            }, duration / 2);
+        }
     }
 
     PAGESmenuShape.css("transition", `all ${duration}ms`);
