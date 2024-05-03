@@ -1,3 +1,5 @@
+//liquid menu animation
+
 let duration = 600;
 let PAGESmenuShape = $(".menu_shape.pages");
 let PAGESmenuShapeBG = $(".menu_shape-bg.pages");
@@ -61,3 +63,39 @@ window.addEventListener("resize", function() {
     PAGESmenuOffset = $(".menu.pages").offset().left;
     moveShape(PAGEScurrentLink);
 });
+
+
+
+//hiding menu wrap on scroll down animation
+
+
+const menuWrap = document.querySelector('.menu-wrap');
+
+let lastScrollTop = 0;
+
+window.addEventListener('scroll', function() {
+  const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+
+  if (scrollTop > lastScrollTop) {
+    // Scroll down
+    moveMenuWrapDown();
+  } else {
+    // Scroll up
+    moveMenuWrapUp();
+  }
+
+  lastScrollTop = scrollTop;
+});
+
+function moveMenuWrapDown() {
+  const newPosition = `calc(100% + 4rem)`;
+  const easing = 'cubic-bezier(0.68, -0.55, 0.27, 1.55)'; // You can adjust easing as needed
+
+  menuWrap.style.transition = `transform 0.5s ${easing}`;
+  menuWrap.style.transform = `translateY(${newPosition})`;
+}
+
+function moveMenuWrapUp() {
+  menuWrap.style.transition = 'transform 0.5s ease'; // Default easing for scrolling up
+  menuWrap.style.transform = 'translateY(0)';
+}
