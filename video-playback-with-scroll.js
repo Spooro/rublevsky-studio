@@ -1,5 +1,5 @@
-//copied from lazy god
 
+// https://thelazygod.com/snippets/video-control
 
 document.addEventListener("DOMContentLoaded", function () {
   const videos = document.querySelectorAll('[tlg-video-control^="video-"] video');
