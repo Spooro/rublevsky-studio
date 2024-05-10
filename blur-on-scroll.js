@@ -7,7 +7,6 @@ const looper = function() {
 
 	const blur = speed < 0 ? speed * -1 : speed;
 
-	TweenMax.to($('.blur'), .5, {skewY: speed + 'deg'});
 	TweenMax.to("#test", .5, { attr: { stdDeviation: "0" + blur * 1 } });
 
 	currentPixel = newPixel;
