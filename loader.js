@@ -1,44 +1,39 @@
+// variables
+let customEase =
+  "M0,0,C0,0,0.13,0.34,0.238,0.442,0.305,0.506,0.322,0.514,0.396,0.54,0.478,0.568,0.468,0.56,0.522,0.584,0.572,0.606,0.61,0.719,0.714,0.826,0.798,0.912,1,1,1,1";
+let counter = {
+  value: 0
+};
+let loaderDuration = 6;
 
-
-const start = performance.now();
-console.log('Starting image load');
-
-const imgLoad = new imagesLoaded("body", { background: true }, onImagesLoaded);
-const numImages = imgLoad.images.length;
-
-console.log(`Number of images to load: ${numImages}`);
-
-imgLoad.on("progress", function (instance, image) {
-    var result = image.isLoaded ? "loaded" : "broken";
-    console.log(`image ${instance.progressedCount} out of ${numImages} is ${result}`);
-
-    const progress = instance.progressedCount / numImages;
-    document.querySelector(".loader_number").textContent = `${Math.round(progress * 100)}%`;
-
-    // gsap loader animation shows progress of images loading
-    gsap.to(".loader_progress", {
-        scaleX: progress,
-    });
-});
-
-function onImagesLoaded() {
-    const end = performance.now();
-    console.log(`Time taken to load ${numImages} images: ${Math.round(end - start)}ms`);
-
-    // Calculate remaining time to ensure loader is displayed for a minimum time
-    const MIN_TIME = 1000;
-    const duration = end - start;
-    const remainingTime = Math.max(MIN_TIME - duration, 0);
-
-    console.log(`Remaining time for loader: ${remainingTime}ms`);
-
-    gsap.to(".loader", {
-        delay: remainingTime / 1000,
-        yPercent: -100,
-        onComplete: () => {
-            console.log('Loader animation completed');
-            // re-enable scrolling
-            gsap.set("body", { overflow: "auto" });
-        },
-    });
+// If not a first time visit in this tab
+if (sessionStorage.getItem("visited") !== null) {
+  loaderDuration = 1;
+  counter = {
+    value: 75
+  };
 }
+sessionStorage.setItem("visited", "true");
+
+function updateLoaderText() {
+  let progress = Math.round(counter.value);
+  $(".loader_number").text(progress);
+}
+function endLoaderAnimation() {
+  $(".trigger").click();
+}
+
+let tl = gsap.timeline({
+  onComplete: endLoaderAnimation
+});
+tl.to(counter, {
+  value: 100,
+  onUpdate: updateLoaderText,
+  duration: loaderDuration,
+  ease: CustomEase.create("custom", customEase)
+});
+tl.to(".loader_progress", {
+    width: "100%",
+    duration: loaderDuration,
+    ease: CustomEase.create("custom", customEase)
+}, 0);
