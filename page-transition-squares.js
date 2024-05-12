@@ -24,14 +24,14 @@ gsap.to(".load_grid-item", {
           duration: 0.0005,
           stagger: { amount: 0.4, from: "random" }
         });
-        gsap.delayedCall(1, () => {
+        gsap.delayedCall(1.2, () => {
           // Delay of 1 second before revealing the new page
           gsap.fromTo(
             ".load_grid-item",
             { opacity: 1 },
             {
               opacity: 0,
-              duration: 0.0005,
+              duration: 0.0004,
               stagger: { amount: 0.4, from: "random" },
               onComplete: () => {
               }
