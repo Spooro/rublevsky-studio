@@ -1,4 +1,6 @@
 window.addEventListener("DOMContentLoaded", (event) => {
+  let animationsPlayed = false; 
+
     // Split text into spans
     let typeSplit = new SplitType("[text-split]", {
       types: "words, chars",
@@ -98,17 +100,21 @@ window.addEventListener("DOMContentLoaded", (event) => {
     gsap.set("[text-split]", { opacity: 1 });
   
     function startHomeAnimations() {
-      let homeHeading = gsap.timeline();
-      homeHeading.from("[home-reveal] .char", { opacity: 0, duration: 0.2, ease: "power1.out", stagger: { amount: 0.8 } });
-
-      let intro = gsap.timeline({ delay: 0.5 }); // Delay of 0.5 seconds
-      intro.add(homeHeading, 0);
-      intro.from("[intro-paragraph] .char", { opacity: 0, duration: 0.4, ease: "power1.out", stagger: { amount: 0.8 } }, 0);
-      intro.from("[dot-reveal]", 0.8, {opacity: 0, transformOrigin: "center", ease: Power2.out }, ">-0.2"); // Animate .dot-reveal after .home-reveal
-      intro.from("[nav-bar]", 1, { opacity: 0, ease: "power3.inOut"}, ">-0.7"); // Animate [nav-bar] after [image]
-      intro.from("[link_block]", 0.5, { opacity: 0, ease: "power1.out", stagger: 0.3 }, ">-0.2");
-      intro.from("[link_bg]", 1, { opacity: 0, ease: "power2.inOut" }, ">-0.5");
-    }
+      if (!animationsPlayed) { // Check if animations haven't been played yet
+          let homeHeading = gsap.timeline();
+          homeHeading.from("[home-reveal] .char", { opacity: 0, duration: 0.2, ease: "power1.out", stagger: { amount: 0.8 } });
+  
+          let intro = gsap.timeline({ delay: 0.5 }); // Delay of 0.5 seconds
+          intro.add(homeHeading, 0);
+          intro.from("[intro-paragraph] .char", { opacity: 0, duration: 0.4, ease: "power1.out", stagger: { amount: 0.8 } }, 0);
+          intro.from("[dot-reveal]", 0.8, { opacity: 0, transformOrigin: "center", ease: Power2.out }, ">-0.2"); // Animate .dot-reveal after .home-reveal
+          intro.from("[nav-bar]", 1, { opacity: 0, ease: "power3.inOut" }, ">-0.7"); // Animate [nav-bar] after [image]
+          intro.from("[link_block]", 0.5, { opacity: 0, ease: "power1.out", stagger: 0.3 }, ">-0.2");
+          intro.from("[link_bg]", 1, { opacity: 0, ease: "power2.inOut" }, ">-0.5");
+  
+          animationsPlayed = true; // Set the flag to true after playing the animations
+      }
+  }
 
     // Call the startHomeAnimations function after the .trigger click
     $(".trigger").click(function() {
