@@ -112,6 +112,6 @@ window.addEventListener("DOMContentLoaded", (event) => {
 
     // Call the startHomeAnimations function after the .trigger click
     $(".trigger").click(function() {
-      setTimeout(startHomeAnimations, 1600); // Delay of 2 seconds (2000 milliseconds)
+      setTimeout(startHomeAnimations, 1500); // Delay of 2 seconds (2000 milliseconds)
     });
 });
