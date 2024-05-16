@@ -7,11 +7,12 @@ const scrollContent = document.querySelector("#scrollContent");
 function createScrollTrigger(element, timeline) {
   ScrollTrigger.create({
     trigger: element,
-    scroller: scrollContent, // Use custom scroll container
-    start: "top bottom", // Start when element enters the viewport
-    once: true, // Play the animation only once
+    scroller: scrollContent,
+    end: "top bottom", // Use 'end' instead of 'start'
+    once: true,
     onEnter: () => timeline.play(),
-    onLeaveBack: () => timeline.pause(), // Pause instead of reversing
+    onLeaveBack: () => timeline.pause(),
+    toggleActions: "play none none reverse" // This will ensure the animation completes even if the scroll direction changes
   });
 }
 
