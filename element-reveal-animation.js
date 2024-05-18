@@ -84,9 +84,6 @@ function startHomeAnimations() {
   intro.from("[link_block]", 0.5, { opacity: 0, ease: "power1.out", stagger: 0.3 }, ">-0.2");
   intro.from("[link_bg]", 1, { opacity: 0, ease: "power2.inOut" }, ">-0.5");
 
-  const timeParagraph = document.querySelector("[time-display]");
-  const timeChars = timeParagraph.querySelectorAll(".char");
-  intro.from(timeChars, { opacity: 0, duration: 0.2, ease: "power1.out", stagger: { amount: 0.8 } });
 }
 
 // Update the time paragraph's content and reset the reveal animation before triggering animations
