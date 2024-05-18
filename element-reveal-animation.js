@@ -1,3 +1,26 @@
+// Function to update the time paragraph's content
+function updateTime() {
+  const timeVersion1 = { timeZone: "America/Toronto", hour12: false, hour: "2-digit", minute: "2-digit" };
+  const timeParagraph = document.querySelector("[time-display]");
+  const timeChars = timeParagraph.querySelectorAll(".char");
+
+  // Update the time paragraph's content
+  timeParagraph.textContent = new Date().toLocaleTimeString('en-US', timeVersion1);
+
+  // Split the updated time into individual characters
+  const chars = Array.from(timeParagraph.textContent.trim().split(''));
+  timeParagraph.innerHTML = '';
+  chars.forEach((char) => {
+    const charSpan = document.createElement('span');
+    charSpan.textContent = char;
+    charSpan.classList.add('char');
+    timeParagraph.appendChild(charSpan);
+  });
+
+  // Reset the time paragraph's reveal animation
+  gsap.set(timeChars, { opacity: 0 });
+}
+
 gsap.registerPlugin(ScrollTrigger);
 
 // Give the scrollable content a variable
@@ -36,9 +59,9 @@ document.querySelectorAll("[letters-fade-in]").forEach((element) => {
   const letters = element.querySelectorAll('.char');
   const tl = gsap.timeline({ paused: true });
   const duration = element.classList.contains('letters-fade-in-slow') ? 0.4 :
-                   element.classList.contains('letters-fade-in-fast') ? 0.1 : 0.2;
-  tl.from(letters, { opacity: 0, duration, ease: "power1.out", stagger: { amount: 0.8 } });
+    element.classList.contains('letters-fade-in-fast') ? 0.1 : 0.2;
 
+  tl.from(letters, { opacity: 0, duration, ease: "power1.out", stagger: { amount: 0.8 } });
   createScrollTrigger(element, tl);
 });
 
@@ -51,7 +74,6 @@ window.addEventListener("scroll", (e) => {
 gsap.set("[text-split]", { opacity: 1 });
 
 function startHomeAnimations() {
-  
   let homeHeading = gsap.timeline();
   homeHeading.from("[home-reveal] .char", { opacity: 0, duration: 0.2, ease: "power1.out", stagger: { amount: 0.8 } });
 
@@ -61,7 +83,14 @@ function startHomeAnimations() {
   intro.from("[nav-bar]", 1, { opacity: 0, ease: "power3.inOut" }, ">-0.7"); // Animate [nav-bar] after [image]
   intro.from("[link_block]", 0.5, { opacity: 0, ease: "power1.out", stagger: 0.3 }, ">-0.2");
   intro.from("[link_bg]", 1, { opacity: 0, ease: "power2.inOut" }, ">-0.5");
+
+  const timeParagraph = document.querySelector("[time-display]");
+  const timeChars = timeParagraph.querySelectorAll(".char");
+  intro.from(timeChars, { opacity: 0, duration: 0.2, ease: "power1.out", stagger: { amount: 0.8 } });
 }
+
+// Update the time paragraph's content and reset the reveal animation before triggering animations
+updateTime();
 
 // Call the startHomeAnimations function after the .trigger click
 $(".trigger").click(function() {
