@@ -58,10 +58,41 @@ document.querySelectorAll("[letters-fade-in]").forEach((element) => {
 
   const letters = element.querySelectorAll('.char');
   const tl = gsap.timeline({ paused: true });
-  const duration = element.classList.contains('letters-fade-in-slow') ? 0.4 :
-    element.classList.contains('letters-fade-in-fast') ? 0.1 : 0.2;
+  tl.from(letters, { opacity: 0, duration: 0.2, ease: "power1.out", stagger: { amount: 0.8 } });
+  createScrollTrigger(element, tl);
+});
 
-  tl.from(letters, { opacity: 0, duration, ease: "power1.out", stagger: { amount: 0.8 } });
+// Select all elements with the letters-fade-in-fast class and animate them
+document.querySelectorAll("[letters-fade-in-fast]").forEach((element) => {
+  const chars = Array.from(element.textContent.trim().split(''));
+  element.innerHTML = '';
+  chars.forEach((char) => {
+    const charSpan = document.createElement('span');
+    charSpan.textContent = char;
+    charSpan.classList.add('char');
+    element.appendChild(charSpan);
+  });
+
+  const letters = element.querySelectorAll('.char');
+  const tl = gsap.timeline({ paused: true });
+  tl.from(letters, { opacity: 0, duration: 0.08, ease: "power1.out", stagger: { amount: 0.45 } });
+  createScrollTrigger(element, tl);
+});
+
+// Select all elements with the letters-fade-in-slow class and animate them
+document.querySelectorAll("[letters-fade-in-slow]").forEach((element) => {
+  const chars = Array.from(element.textContent.trim().split(''));
+  element.innerHTML = '';
+  chars.forEach((char) => {
+    const charSpan = document.createElement('span');
+    charSpan.textContent = char;
+    charSpan.classList.add('char');
+    element.appendChild(charSpan);
+  });
+
+  const letters = element.querySelectorAll('.char');
+  const tl = gsap.timeline({ paused: true });
+  tl.from(letters, { opacity: 0, duration: 0.4, ease: "power1.out", stagger: { amount: 0.8 } });
   createScrollTrigger(element, tl);
 });
 
@@ -83,7 +114,6 @@ function startHomeAnimations() {
   intro.from("[nav-bar]", 1, { opacity: 0, ease: "power3.inOut" }, ">-0.7"); // Animate [nav-bar] after [image]
   intro.from("[link_block]", 0.5, { opacity: 0, ease: "power1.out", stagger: 0.3 }, ">-0.2");
   intro.from("[link_bg]", 1, { opacity: 0, ease: "power2.inOut" }, ">-0.5");
-
 }
 
 // Update the time paragraph's content and reset the reveal animation before triggering animations
