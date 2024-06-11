@@ -27,3 +27,13 @@ apsElements.forEach(function(element) {
     window.location.href = "https://www.africapowersupply.com/";
   });
 });
+
+// Select all elements with the "click-redirect" attribute set to "aps"
+const apsElements = document.querySelectorAll('[click-redirect="32karata"]');
+
+// Add click event listener to each element
+apsElements.forEach(function(element) {
+  element.addEventListener("click", function() {
+    window.location.href = "https://rublevsky-studio.webflow.io/32karata";
+  });
+});
