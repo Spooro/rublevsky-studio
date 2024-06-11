@@ -28,11 +28,11 @@ apsElements.forEach(function(element) {
   });
 });
 
-// Select all elements with the "click-redirect" attribute set to "aps"
-const apsElements = document.querySelectorAll('[click-redirect="32karata"]');
+// Select all elements with the "click-redirect" attribute set to "32karata"
+const karat = document.querySelectorAll('[click-redirect="32karata"]');
 
 // Add click event listener to each element
-apsElements.forEach(function(element) {
+karat.forEach(function(element) {
   element.addEventListener("click", function() {
     window.location.href = "https://rublevsky-studio.webflow.io/32karata";
   });
