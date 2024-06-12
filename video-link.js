@@ -34,6 +34,6 @@ const karat = document.querySelectorAll('[click-redirect="32karata"]');
 // Add click event listener to each element
 karat.forEach(function(element) {
   element.addEventListener("click", function() {
-    window.location.href = "https://rublevsky-studio.webflow.io/32karata";
+    window.location.href = "www.rublevsky.studio/32karata/home";
   });
 });
