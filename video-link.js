@@ -4,7 +4,7 @@ const beautyfloorElements = document.querySelectorAll('[click-redirect="bfloor"]
 // Add click event listener to each element
 beautyfloorElements.forEach(function(element) {
   element.addEventListener("click", function() {
-    window.location.href = "https://bfloor.ru/";
+    window.open("https://bfloor.ru/", "_blank");
   });
 });
 
@@ -14,7 +14,7 @@ const inksoulElements = document.querySelectorAll('[click-redirect="inksoul"]');
 // Add click event listener to each element
 inksoulElements.forEach(function(element) {
   element.addEventListener("click", function() {
-    window.location.href = "https://inksoul.webflow.io/";
+    window.open("https://inksoul.webflow.io/", "_blank");
   });
 });
 
@@ -24,7 +24,7 @@ const apsElements = document.querySelectorAll('[click-redirect="aps"]');
 // Add click event listener to each element
 apsElements.forEach(function(element) {
   element.addEventListener("click", function() {
-    window.location.href = "https://www.africapowersupply.com/";
+    window.open("https://www.africapowersupply.com/", "_blank");
   });
 });
 
@@ -34,6 +34,6 @@ const karat = document.querySelectorAll('[click-redirect="32karata"]');
 // Add click event listener to each element
 karat.forEach(function(element) {
   element.addEventListener("click", function() {
-    window.location.href = "https://www.rublevsky.studio/32karata/home";
+    window.open("https://www.rublevsky.studio/32karata/home", "_blank");
   });
 });
