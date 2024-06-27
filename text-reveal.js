@@ -55,7 +55,7 @@
           opacity: 0,
           scrollTrigger: {
             trigger: element,
-            start: 'top 50%',
+            start: 'top 25%',
             end: 'top 10%',
             scrub: true,
             markers: false
