@@ -7,8 +7,8 @@
     gsap.from(text.words, {
       scrollTrigger: {
         trigger: element,
-        start: 'top 60%',
-        end: 'top 20%',
+        start: 'top 50%',
+        end: 'top 10%',
         scrub: true,
         markers: false
       },
