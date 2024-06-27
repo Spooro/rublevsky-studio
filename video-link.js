@@ -28,6 +28,17 @@ apsElements.forEach(function(element) {
   });
 });
 
+// Select all elements with the "click-redirect" attribute set to "store"
+const store = document.querySelectorAll('[click-redirect="store"]');
+
+// Add click event listener to each element
+store.forEach(function(element) {
+  element.addEventListener("click", function() {
+    window.open("https://www.rublevsky.studio/store/shop", "_blank");
+  });
+});
+
+
 // Select all elements with the "click-redirect" attribute set to "32karata"
 const karat = document.querySelectorAll('[click-redirect="32karata"]');
 
