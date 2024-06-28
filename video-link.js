@@ -34,7 +34,7 @@ const store = document.querySelectorAll('[click-redirect="store"]');
 // Add click event listener to each element
 store.forEach(function(element) {
   element.addEventListener("click", function() {
-    window.open("https://www.rublevsky.studio/store/shop", "_blank");
+    window.open("https://rublevsky-studio.webflow.io/store/shop", "_blank");
   });
 });
 
