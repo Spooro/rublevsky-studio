@@ -29,7 +29,7 @@
     const tl = gsap.timeline({
       scrollTrigger: {
         trigger: container,
-        start: 'top 60%',
+        start: 'top 75%',
         end: `+=${totalDuration * 25}%`,
         scrub: 1,
         markers: false
