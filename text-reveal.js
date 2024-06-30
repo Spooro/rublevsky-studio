@@ -8,7 +8,7 @@
       scrollTrigger: {
         trigger: element,
         start: 'top 50%',
-        end: 'top 10%',
+        end: 'top 30%',
         scrub: true,
         markers: false
       },
@@ -20,7 +20,7 @@
   // Function for reveal-points animation
   function animateRevealPoints(container) {
     const points = container.querySelectorAll('[reveal-point]');
-    const pointDuration = 0.4;
+    const pointDuration = 0.3;
     const pointGap = 0.1;
     const totalDuration = points.length * (pointDuration + pointGap);
 
@@ -30,7 +30,7 @@
       scrollTrigger: {
         trigger: container,
         start: 'top 75%',
-        end: `+=${totalDuration * 25}%`,
+        end: `+=${totalDuration * 23}%`,
         scrub: 1,
         markers: false
       }
@@ -55,8 +55,8 @@
           opacity: 0,
           scrollTrigger: {
             trigger: element,
-            start: 'top 25%',
-            end: 'top 10%',
+            start: 'top 15%',
+            end: 'top 5%',
             scrub: true,
             markers: false
           }
