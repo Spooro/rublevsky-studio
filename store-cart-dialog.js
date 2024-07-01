@@ -1,24 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const body = document.querySelector('body');
-    const isMobile = window.innerWidth <= 768; // Adjust this breakpoint as needed
-  
-    function disableBodyScroll() {
-      if (isMobile) {
-        body.classList.add('no-scroll');
-        if (window.SScroll && window.SScroll.call) {
-          window.SScroll.call.stop();
-        }
-      }
-    }
-  
-    function enableBodyScroll() {
-      if (isMobile) {
-        body.classList.remove('no-scroll');
-        if (window.SScroll && window.SScroll.call) {
-          window.SScroll.call.start();
-        }
-      }
-    }
+    const isMobile = () => window.innerWidth <= 767; // Adjust this breakpoint as needed
   
     document.addEventListener('click', (e) => {
       // Check if the clicked element is an open button
@@ -27,7 +8,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const nextDialog = e.target.nextElementSibling;
         if (nextDialog) {
           nextDialog.showModal();
-          disableBodyScroll();
+          if (isMobile()) {
+            document.body.classList.add('no-scroll');
+          }
         }
       }
       // Check if the clicked element is a close button inside a dialog
@@ -36,7 +19,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const dialog = e.target.closest('[element="cart"]');
         if (dialog) {
           dialog.close();
-          enableBodyScroll();
+          if (isMobile()) {
+            document.body.classList.remove('no-scroll');
+          }
         }
       }
       else if (e.target.matches('[element="cart"]')) {
@@ -48,7 +33,9 @@ document.addEventListener('DOMContentLoaded', () => {
           e.clientY > dialogDimensions.bottom
         ) {
           e.target.close();
-          enableBodyScroll();
+          if (isMobile()) {
+            document.body.classList.remove('no-scroll');
+          }
         }
       }
     });
