@@ -46,7 +46,7 @@ function onSelectedImagesLoaded() {
   displayTopSlowestMedia(5);
 
   // Ensure minimum duration for loader animation
-  const MIN_DURATION = 1000;
+  const MIN_DURATION = 500;
   const duration = Math.max(totalTime, MIN_DURATION);
 
   // Fade out loader
