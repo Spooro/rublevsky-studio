@@ -2,18 +2,38 @@ import imagesLoaded from "https://cdn.skypack.dev/imagesloaded";
 import gsap from "https://cdn.skypack.dev/gsap";
 
 const start = performance.now();
-const imageLoadTimes = [];
+const mediaLoadTimes = [];
 
-// Explicitly select elements with the 'loader' attribute
-const elementsToLoad = document.querySelectorAll('[loader]');
-const numSelectedImages = elementsToLoad.length;
+// Defer loading of non-priority images
+function deferNonPriorityMedia() {
+  const nonPriorityImages = document.querySelectorAll('img:not([loader])');
+  nonPriorityImages.forEach(img => {
+    img.dataset.src = img.src;
+    img.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+  });
+}
+
+// Restore non-priority images
+function restoreNonPriorityMedia() {
+  const nonPriorityImages = document.querySelectorAll('img[data-src]');
+  nonPriorityImages.forEach(img => {
+    img.src = img.dataset.src;
+  });
+}
+
+// Explicitly select images with the 'loader' attribute
+const imagesToLoad = document.querySelectorAll('img[loader]');
+const numSelectedImages = imagesToLoad.length;
 
 console.log(`Selected images to load: ${numSelectedImages}`);
 
-// Create a new imagesLoaded instance with only the selected elements
-const imgLoad = new imagesLoaded(elementsToLoad, { background: true }, onSelectedImagesLoaded);
+// Defer loading of non-priority images
+deferNonPriorityMedia();
 
-imgLoad.on("progress", function (instance, image) {
+// Create a new imagesLoaded instance with only the selected images
+const imageLoad = new imagesLoaded(imagesToLoad, onSelectedImagesLoaded);
+
+imageLoad.on("progress", function (instance, image) {
   updateLoaderProgress(instance, image);
 });
 
@@ -23,24 +43,26 @@ function onSelectedImagesLoaded() {
   console.log(`All selected images loaded. Total time: ${totalTime}ms`);
 
   // Display top 5 slowest-loading selected images
-  displayTopSlowestImages(5);
+  displayTopSlowestMedia(5);
 
   // Fade out loader
   fadeOutLoader();
+
+  // Restore non-priority images
+  restoreNonPriorityMedia();
 }
 
 function updateLoaderProgress(instance, image) {
   const currentTime = performance.now();
   const result = image.isLoaded ? "loaded" : "broken";
-  const imageUrl = image.img ? image.img.src : getBackgroundImageUrl(image.element);
   const loadTime = currentTime - start;
 
-  console.log(`[${loadTime.toFixed(2)}ms] Image ${instance.progressedCount}/${numSelectedImages} (${result}): ${imageUrl}`);
+  console.log(`[${loadTime.toFixed(2)}ms] IMG ${instance.progressedCount}/${numSelectedImages} (${result}): ${image.img.src}`);
 
   if (image.isLoaded) {
-    imageLoadTimes.push({ url: imageUrl, time: loadTime });
+    mediaLoadTimes.push({ type: "IMG", url: image.img.src, time: loadTime });
   } else {
-    console.warn(`Failed to load image: ${imageUrl}`);
+    console.warn(`Failed to load IMG: ${image.img.src}`);
   }
 
   const progress = instance.progressedCount / numSelectedImages;
@@ -55,7 +77,7 @@ function updateLoaderUI(progress) {
     loaderNumberElement.textContent = `${Math.round(progress * 100)}%`;
   }
 
-  // gsap loader animation shows progress of images loading
+  // gsap loader animation shows progress of image loading
   gsap.to(".studio-loader_progress", {
     width: `${progress * 100}%`,
     duration: 0.3,
@@ -85,18 +107,12 @@ function fadeOutLoader() {
   });
 }
 
-function getBackgroundImageUrl(element) {
-  const style = window.getComputedStyle(element);
-  const backgroundImage = style.backgroundImage;
-  return backgroundImage.replace(/url\(['"]?(.*?)['"]?\)/i, '$1');
-}
-
-function displayTopSlowestImages(count) {
-  const sortedImages = imageLoadTimes.sort((a, b) => b.time - a.time);
-  const topSlowest = sortedImages.slice(0, Math.min(count, sortedImages.length));
+function displayTopSlowestMedia(count) {
+  const sortedMedia = mediaLoadTimes.sort((a, b) => b.time - a.time);
+  const topSlowest = sortedMedia.slice(0, Math.min(count, sortedMedia.length));
 
   console.log(`Top ${topSlowest.length} slowest-loading images:`);
-  topSlowest.forEach((image, index) => {
-    console.log(`${index + 1}. ${image.url} - ${image.time.toFixed(2)}ms`);
+  topSlowest.forEach((media, index) => {
+    console.log(`${index + 1}. ${media.url} - ${media.time.toFixed(2)}ms`);
   });
 }
