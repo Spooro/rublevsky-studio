@@ -45,8 +45,12 @@ function onSelectedImagesLoaded() {
   // Display top 5 slowest-loading selected images
   displayTopSlowestMedia(5);
 
+  // Ensure minimum duration for loader animation
+  const MIN_DURATION = 1000;
+  const duration = Math.max(totalTime, MIN_DURATION);
+
   // Fade out loader
-  fadeOutLoader();
+  fadeOutLoader(duration);
 
   // Restore non-priority images
   restoreNonPriorityMedia();
@@ -72,9 +76,16 @@ function updateLoaderProgress(instance, image) {
 function updateLoaderUI(progress) {
   const loaderNumberElement = document.querySelector("h1.loader_number");
 
-  // Update the loader number text
+  // Smooth transition from "R" to percentage
   if (loaderNumberElement) {
-    loaderNumberElement.textContent = `${Math.round(progress * 100)}%`;
+    gsap.to(loaderNumberElement, {
+      duration: 0.3,
+      textContent: `${Math.round(progress * 100)}%`,
+      ease: "none",
+      onUpdate: function () {
+        loaderNumberElement.textContent = `${Math.round(gsap.getProperty(loaderNumberElement, "textContent"))}%`;
+      }
+    });
   }
 
   // gsap loader animation shows progress of image loading
@@ -85,18 +96,19 @@ function updateLoaderUI(progress) {
   });
 }
 
-function fadeOutLoader() {
-  const MIN_TIME = 1000;
+function fadeOutLoader(minDuration) {
   const duration = performance.now() - start;
-  const remainingTime = Math.max(MIN_TIME - duration, 0);
+  const remainingTime = Math.max(minDuration - duration, 0);
 
   gsap.to(".studio-loader", {
     delay: remainingTime / 1000,
     opacity: 0,
     duration: 0.5,
+    ease: "easeOutExpo",
     onComplete: () => {
       gsap.set(".studio-loader", { display: "none" });
       gsap.set("body", { overflow: "auto" });
+      resetLoaderNumber();
     },
   });
 
@@ -104,6 +116,7 @@ function fadeOutLoader() {
     delay: remainingTime / 1000,
     opacity: 0,
     duration: 0.5,
+    ease: "easeOutExpo",
   });
 }
 
@@ -116,3 +129,31 @@ function displayTopSlowestMedia(count) {
     console.log(`${index + 1}. ${media.url} - ${media.time.toFixed(2)}ms`);
   });
 }
+
+// Function to show the loader with animation
+function showLoader() {
+  gsap.set(".studio-loader", { display: "flex", opacity: 0 });
+  gsap.to(".studio-loader", {
+    opacity: 1,
+    duration: 0.5,
+    ease: "easeOutExpo",
+  });
+
+  resetLoaderNumber();
+}
+
+// Function to reset loader number to "R"
+function resetLoaderNumber() {
+  const loaderNumberElement = document.querySelector("h1.loader_number");
+  if (loaderNumberElement) {
+    loaderNumberElement.textContent = "R";
+    gsap.set(loaderNumberElement, { opacity: 1 });
+  }
+}
+
+// Add event listeners to elements with the link_block attribute
+document.querySelectorAll('[link_block]').forEach(link => {
+  link.addEventListener("click", () => {
+    showLoader();
+  });
+});
