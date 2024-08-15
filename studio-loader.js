@@ -7,12 +7,14 @@ let loadTimes = [];
 function initLoader() {
   gsap.set("body", { overflow: "hidden" });
 
+  // Select all images and background elements, excluding those with the "loader-exception" attribute
   const allImages = document.querySelectorAll("img, [style*='background-image']");
   const imagesToLoad = Array.from(allImages).filter(img => !img.hasAttribute('loader-exception'));
   const numImages = imagesToLoad.length;
 
   console.log(`Total images to load (excluding exceptions): ${numImages}`);
 
+  // Use imagesLoaded on the filtered list
   const imgLoad = imagesLoaded(imagesToLoad, { background: true });
 
   imgLoad.on("progress", function (instance, image) {
@@ -60,6 +62,7 @@ function updateLoaderProgress(instance, totalImages) {
   const progress = instance.progressedCount / totalImages;
   const progressPercentage = Math.round(progress * 100);
 
+  // Ensure the progress bar width is updated correctly
   gsap.to(".studio-loader_progress", {
     width: `${progressPercentage}%`,
     duration: 0.3,
