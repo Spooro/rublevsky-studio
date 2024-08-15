@@ -4,64 +4,40 @@ import gsap from "https://cdn.skypack.dev/gsap";
 const start = performance.now();
 const mediaLoadTimes = [];
 
-// Defer loading of non-priority images
-function deferNonPriorityMedia() {
-  const nonPriorityImages = document.querySelectorAll('img:not([loader])');
-  nonPriorityImages.forEach(img => {
-    img.dataset.src = img.src;
-    img.src = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7';
+function initLoader() {
+  const allImages = document.querySelectorAll('img');
+  const numImages = allImages.length;
+
+  console.log(`Total images to load: ${numImages}`);
+
+  showLoader();
+
+  const imageLoad = new imagesLoaded(document.body, onAllImagesLoaded);
+
+  imageLoad.on("progress", function (instance, image) {
+    updateLoaderProgress(instance, image, numImages);
   });
 }
 
-// Restore non-priority images
-function restoreNonPriorityMedia() {
-  const nonPriorityImages = document.querySelectorAll('img[data-src]');
-  nonPriorityImages.forEach(img => {
-    img.src = img.dataset.src;
-  });
-}
-
-// Explicitly select images with the 'loader' attribute
-const imagesToLoad = document.querySelectorAll('img[loader]');
-const numSelectedImages = imagesToLoad.length;
-
-console.log(`Selected images to load: ${numSelectedImages}`);
-
-// Defer loading of non-priority images
-deferNonPriorityMedia();
-
-// Create a new imagesLoaded instance with only the selected images
-const imageLoad = new imagesLoaded(imagesToLoad, onSelectedImagesLoaded);
-
-imageLoad.on("progress", function (instance, image) {
-  updateLoaderProgress(instance, image);
-});
-
-function onSelectedImagesLoaded() {
+function onAllImagesLoaded() {
   const end = performance.now();
   const totalTime = Math.round(end - start);
-  console.log(`All selected images loaded. Total time: ${totalTime}ms`);
+  console.log(`All images loaded. Total time: ${totalTime}ms`);
 
-  // Display top 5 slowest-loading selected images
   displayTopSlowestMedia(5);
 
-  // Ensure minimum duration for loader animation
   const MIN_DURATION = 500;
   const duration = Math.max(totalTime, MIN_DURATION);
 
-  // Fade out loader
   fadeOutLoader(duration);
-
-  // Restore non-priority images
-  restoreNonPriorityMedia();
 }
 
-function updateLoaderProgress(instance, image) {
+function updateLoaderProgress(instance, image, totalImages) {
   const currentTime = performance.now();
   const result = image.isLoaded ? "loaded" : "broken";
   const loadTime = currentTime - start;
 
-  console.log(`[${loadTime.toFixed(2)}ms] IMG ${instance.progressedCount}/${numSelectedImages} (${result}): ${image.img.src}`);
+  console.log(`[${loadTime.toFixed(2)}ms] IMG ${instance.progressedCount}/${totalImages} (${result}): ${image.img.src}`);
 
   if (image.isLoaded) {
     mediaLoadTimes.push({ type: "IMG", url: image.img.src, time: loadTime });
@@ -69,14 +45,13 @@ function updateLoaderProgress(instance, image) {
     console.warn(`Failed to load IMG: ${image.img.src}`);
   }
 
-  const progress = instance.progressedCount / numSelectedImages;
+  const progress = instance.progressedCount / totalImages;
   updateLoaderUI(progress);
 }
 
 function updateLoaderUI(progress) {
   const loaderNumberElement = document.querySelector("h1.loader_number");
 
-  // Smooth transition from "R" to percentage
   if (loaderNumberElement) {
     gsap.to(loaderNumberElement, {
       duration: 0.3,
@@ -88,7 +63,6 @@ function updateLoaderUI(progress) {
     });
   }
 
-  // gsap loader animation shows progress of image loading
   gsap.to(".studio-loader_progress", {
     width: `${progress * 100}%`,
     duration: 0.3,
@@ -130,7 +104,6 @@ function displayTopSlowestMedia(count) {
   });
 }
 
-// Function to show the loader with animation
 function showLoader() {
   gsap.set(".studio-loader", { display: "flex", opacity: 0 });
   gsap.to(".studio-loader", {
@@ -142,7 +115,6 @@ function showLoader() {
   resetLoaderNumber();
 }
 
-// Function to reset loader number to "R"
 function resetLoaderNumber() {
   const loaderNumberElement = document.querySelector("h1.loader_number");
   if (loaderNumberElement) {
@@ -151,9 +123,8 @@ function resetLoaderNumber() {
   }
 }
 
-// Add event listeners to elements with the link_block attribute
+document.addEventListener('DOMContentLoaded', initLoader);
+
 document.querySelectorAll('[link_block]').forEach(link => {
-  link.addEventListener("click", () => {
-    showLoader();
-  });
+  link.addEventListener("click", showLoader);
 });
