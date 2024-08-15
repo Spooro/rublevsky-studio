@@ -2,21 +2,21 @@ import imagesLoaded from "https://cdn.skypack.dev/imagesloaded";
 import gsap from "https://cdn.skypack.dev/gsap";
 
 const start = performance.now();
-let loadTimes = [];  // Array to store the load times of images
+let loadTimes = [];
 
 function initLoader() {
   gsap.set("body", { overflow: "hidden" });
 
-  const allImages = Array.from(document.querySelectorAll("img, [style*='background-image']")); // Include images and background images
-  const imagesToLoad = allImages.filter(img => !img.hasAttribute('loader-exception')); // Filter out exceptions
+  const allImages = document.querySelectorAll("img, [style*='background-image']");
+  const imagesToLoad = Array.from(allImages).filter(img => !img.hasAttribute('loader-exception'));
   const numImages = imagesToLoad.length;
 
   console.log(`Total images to load (excluding exceptions): ${numImages}`);
 
-  const imgLoad = imagesLoaded(imagesToLoad, { background: true }); // Load only filtered images
+  const imgLoad = imagesLoaded(imagesToLoad, { background: true });
 
   imgLoad.on("progress", function (instance, image) {
-    const imageElement = image.img || image.element; // Handle both img and background images
+    const imageElement = image.img || image.element;
     const loadTime = performance.now() - start;
 
     if (imagesToLoad.includes(imageElement)) {
@@ -37,7 +37,6 @@ function onAllImagesLoaded(instance, numImages) {
 
   updateLoaderProgress(instance, numImages);
 
-  // Sort loadTimes to find the top 10 slowest
   loadTimes.sort((a, b) => b.loadTime - a.loadTime);
   const slowestLoads = loadTimes.slice(0, 10);
   console.log("Top 10 slowest image loads:", slowestLoads);
