@@ -7,22 +7,20 @@ let loadTimes = [];  // Array to store the load times of images
 function initLoader() {
   gsap.set("body", { overflow: "hidden" });
 
-  const imgLoad = imagesLoaded(document.body, { background: true });
-  const images = Array.from(imgLoad.images);
-
-  // Filter out images that have the 'loader-exception' attribute
-  const imagesToLoad = images.filter(img => !img.img.hasAttribute('loader-exception'));
+  const allImages = Array.from(document.querySelectorAll("img, [style*='background-image']")); // Include images and background images
+  const imagesToLoad = allImages.filter(img => !img.hasAttribute('loader-exception')); // Filter out exceptions
   const numImages = imagesToLoad.length;
 
   console.log(`Total images to load (excluding exceptions): ${numImages}`);
 
+  const imgLoad = imagesLoaded(imagesToLoad, { background: true }); // Load only filtered images
+
   imgLoad.on("progress", function (instance, image) {
-    const imageElement = image.img;
+    const imageElement = image.img || image.element; // Handle both img and background images
+    const loadTime = performance.now() - start;
 
-    if (!imageElement.hasAttribute('loader-exception')) {
-      const loadTime = performance.now() - start;
-      loadTimes.push({ src: imageElement.src, loadTime });
-
+    if (imagesToLoad.includes(imageElement)) {
+      loadTimes.push({ src: imageElement.src || imageElement.style.backgroundImage, loadTime });
       updateLoaderProgress(instance, numImages);
     }
   });
